@@ -3,9 +3,10 @@ import bodyParser from "body-parser";
 import qr from "qr-image";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 
 // Workaround for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -33,6 +34,7 @@ app.post("/generate", (req, res) => {
 
   try {
     const qrCode = qr.imageSync(url, { type: "png" }); // Generate QR code
+    // qrCode.pipe(fs.createWriteStream("qr_image.png"));
     const base64QR = Buffer.from(qrCode).toString("base64"); // Convert to base64
     res.send({ qr: base64QR }); // Send the base64 string
   } catch (error) {
